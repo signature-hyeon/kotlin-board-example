@@ -17,7 +17,7 @@ class ArticleMapRepositoryTest {
     }
 
     @Test
-    fun `이미 존재하는 게시물을 저장하면 새로운 갱신된 값으로 반환한다`() {
+    fun `이미 존재하는 게시물을 저장하면 갱신된 값을 반환한다`() {
         val sut = ArticleMapRepository()
         val article = ArticleFixture.generate(id = 1L)
         val updatedArticle = ArticleFixture.generate(id = 1L)
@@ -29,7 +29,7 @@ class ArticleMapRepositoryTest {
     }
 
     @Test
-    fun `ID에 해당하는 게시물이 존재하면 정상적으로 반환한다`() {
+    fun `ID에 해당하는 게시물이 존재하면 정상적으로 조회된다`() {
         val sut = ArticleMapRepository()
         val request = ArticleFixture.generate()
         sut.save(request)

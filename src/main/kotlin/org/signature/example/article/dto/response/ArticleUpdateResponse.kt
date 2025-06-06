@@ -3,16 +3,16 @@ package org.signature.example.article.dto.response
 import org.signature.example.article.entity.ArticleEntity
 import java.time.LocalDateTime
 
-data class ArticleRegisterResponse(
-    val articleId: Long,
+data class ArticleUpdateResponse (
     val title: String,
     val content: String,
-    val createdAt: LocalDateTime,
-) {
+    val userId: Long,
+    val updatedAt: LocalDateTime,
+){
     constructor(article: ArticleEntity) : this(
-        articleId = article.savedId(),
-        title = article.title,
-        content = article.content,
-        createdAt = article.createdAt
+        article.title,
+        article.content,
+        article.userId,
+        article.updatedAt
     )
 }

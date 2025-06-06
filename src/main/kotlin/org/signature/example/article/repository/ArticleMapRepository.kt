@@ -15,7 +15,9 @@ class ArticleMapRepository : ArticleRepository {
             id = if (article.isNew()) articleId.incrementAndGet() else article.id,
             userId = article.userId,
             title = article.title,
-            content = article.content
+            content = article.content,
+            createdAt = article.createdAt,
+            updatedAt = article.updatedAt
         )
         store[entity.savedId()] = entity
         return entity
