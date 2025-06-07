@@ -2,19 +2,25 @@ package org.signature.example.article.service
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.signature.example.article.dto.request.ArticleUpdateRequest
 import org.signature.example.article.entity.ArticleEntity
 import org.signature.example.article.fixture.ArticleFixture
-import org.signature.example.article.repository.ArticleMapRepository
 import org.signature.example.article.repository.ArticleRepository
 
 class ArticleServiceTest {
 
+    private lateinit var sut: ArticleService
+
+    @BeforeEach
+    fun setUp() {
+        sut = ArticleService(FakeArticleRepository())
+    }
+
     @Test
     fun `게시글을 등록 시 새로운 ID 가 생성되어 반환된다`() {
-        val sut = ArticleService(StubRepository())
         val request = ArticleFixture.generateRegisterRequest()
 
         val result = sut.registerArticle(request)
@@ -24,7 +30,6 @@ class ArticleServiceTest {
 
     @Test
     fun `게시글을 조회하면 게시글이 정상적으로 반환한다`() {
-        val sut = ArticleService(StubRepository())
         val saved = sut.registerArticle(ArticleFixture.generateRegisterRequest())
 
         val result = sut.getArticle(saved.articleId)
@@ -36,8 +41,6 @@ class ArticleServiceTest {
 
     @Test
     fun `ID로 게시글을 조회 했을 때 결과가 없다면 예외가 발생한다`() {
-        val sut = ArticleService(StubRepository())
-
         val exception = assertThrows<IllegalArgumentException> {
             sut.getArticle(2L)
         }
@@ -47,7 +50,6 @@ class ArticleServiceTest {
 
     @Test
     fun `게시글을 수정하면 정상적으로 업데이트된다`() {
-        val sut = ArticleService(StubRepository())
         val saveRequest = ArticleFixture.generateRegisterRequest()
         val saved = sut.registerArticle(saveRequest)
         val updateRequest = ArticleUpdateRequest(
@@ -65,8 +67,6 @@ class ArticleServiceTest {
 
     @Test
     fun `존재하지 않은 게시물인 경우 수정하면 예외가 발생한다`() {
-        val sut = ArticleService(StubRepository())
-
         val exception = assertThrows<IllegalArgumentException> {
             sut.getArticle(1)
         }
@@ -76,7 +76,6 @@ class ArticleServiceTest {
 
     @Test
     fun `작성자가 아닌 경우 게시글을 수정하면 예외가 발생한다`() {
-        val sut = ArticleService(ArticleMapRepository())
         val saveRequest = ArticleFixture.generateRegisterRequest()
         val saved = sut.registerArticle(saveRequest)
         val updateRequest = ArticleUpdateRequest(
@@ -93,7 +92,7 @@ class ArticleServiceTest {
     }
 }
 
-class StubRepository : ArticleRepository {
+class FakeArticleRepository : ArticleRepository {
     private val store = mutableMapOf<Long, ArticleEntity>()
     private var articleId = 1L
 
